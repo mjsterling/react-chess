@@ -1,62 +1,139 @@
 .board {
-    height: 64vh;
-    width: 64vh;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-flow: row wrap;
-    box-sizing: border-box;
+  height: 64vh;
+  width: 64vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
 }
 
 .square {
-    width: 8vh;
-    height: 8vh;
-    margin: 0;
-    padding: 0;
-    background-color: rgba(135, 206, 235, 0.5);
-    border: 1px solid black;
-    box-sizing: border-box;
-    font-family: sans-serif;
-    font-size: 2vh;
+  width: 8vh;
+  height: 8vh;
+  margin: 0;
+  padding: 1vh;
+  background-color: rgb(192, 237, 255);
+  border: 1px solid black;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 2vh;
 }
 
 .active {
-    width: 8vh;
-    height: 8vh;
-    margin: 0;
-    padding: 0;
-    border: 1px solid black;
-    box-sizing: border-box;
-    background-color: white;
-    font-family: sans-serif;
-    font-size: 2vh;
-    font-weight: bold;
+  width: 8vh;
+  height: 8vh;
+  margin: 0;
+  padding: 1vh;
+  border: 1px solid black;
+  box-sizing: border-box;
+  background-color: white;
+  font-family: sans-serif;
+  font-size: 2vh;
+  font-weight: bold;
 }
 
 .legal {
-    width: 8vh;
-    height: 8vh;
-    margin: 0;
-    padding: 0;
-    border: 1px solid black;
-    box-sizing: border-box;
-    background-color: yellow;
+  width: 8vh;
+  height: 8vh;
+  margin: 0;
+  padding: 1vh;
+  border: 1px solid black;
+  box-sizing: border-box;
+  background-color: yellow;
 }
 
 .capture {
-        width: 8vh;
-        height: 8vh;
-        margin: 0;
-        padding: 0;
-        border: 1px solid black;
-        box-sizing: border-box;
-        background-color: red;
-        font-weight: bold;
-        color: white;
-        font-size: 2vh;
-    }
+  width: 8vh;
+  height: 8vh;
+  margin: 0;
+  padding: 1vh;
+  border: 1px solid black;
+  box-sizing: border-box;
+  background-color: red;
+  font-weight: bold;
+  color: white;
+  font-size: 2vh;
+}
 
-    .toggleturn {
-        height: 5vh;
-        width: 20vw;
-    }
+.toggleturn {
+  height: 5vh;
+  width: 20vw;
+}
+
+
+.wp {
+    content: url(assets/wp.svg);
+height: 6vh;
+width: 6vh;
+}
+.wr {
+    content: url(assets/wr.svg);
+height: 6vh;
+width: 6vh;
+
+}
+.wn {
+    content: url(assets/wn.svg);
+height: 6vh;
+width: 6vh;
+
+}
+
+.wb {
+    content: url(assets/wb.svg);
+height: 6vh;
+width: 6vh;
+
+}
+
+.wq {
+    content: url(assets/wq.svg);
+height: 6vh;
+width: 6vh;
+
+}
+.wk {
+    content: url(assets/wk.svg);
+height: 6vh;
+width: 6vh;
+
+}
+.bp {
+    content: url(assets/bp.svg);
+height: 6vh;
+width: 6vh;
+
+}
+.br {
+    content: url(assets/br.svg);
+height: 6vh;
+width: 6vh;
+
+}
+.bn {
+    content: url(assets/bn.svg);
+height: 6vh;
+width: 6vh;
+
+}
+
+.bb {
+    content: url(assets/bb.svg);
+height: 6vh;
+width: 6vh;
+
+}
+
+.bq {
+    content: url(assets/bq.svg);
+height: 6vh;
+width: 6vh;
+
+}
+.bk {
+    content: url(assets/bk.svg);
+height: 6vh;
+width: 6vh;
+
+}

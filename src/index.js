@@ -1,7 +1,74 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import { unstable_concurrentAct } from "react-dom/test-utils";
+// import { unstable_concurrentAct } from "react-dom/test-utils";
+const coords = [
+  "a8",
+  "b8",
+  "c8",
+  "d8",
+  "e8",
+  "f8",
+  "g8",
+  "h8",
+  "a7",
+  "b7",
+  "c7",
+  "d7",
+  "e7",
+  "f7",
+  "g7",
+  "h7",
+  "a6",
+  "b6",
+  "c6",
+  "d6",
+  "e6",
+  "f6",
+  "g6",
+  "h6",
+  "a5",
+  "b5",
+  "c5",
+  "d5",
+  "e5",
+  "f5",
+  "g5",
+  "h5",
+  "a4",
+  "b4",
+  "c4",
+  "d4",
+  "e4",
+  "f4",
+  "g4",
+  "h4",
+  "a3",
+  "b3",
+  "c3",
+  "d3",
+  "e3",
+  "f3",
+  "g3",
+  "h3",
+  "a2",
+  "b2",
+  "c2",
+  "d2",
+  "e2",
+  "f2",
+  "g2",
+  "h2",
+  "a1",
+  "b1",
+  "c1",
+  "d1",
+  "e1",
+  "f1",
+  "g1",
+  "h1",
+];
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -74,18 +141,114 @@ class Game extends React.Component {
             ["w", "n"],
             ["w", "r"],
           ],
+          movecoord: "",
+          wkcheck: false,
+          wkmoved: false,
+          bkcheck: false,
+          wkmoved: false,
         },
       ],
       wIsNext: true,
       turnNumber: 0,
-      highlights: Array(64).fill("square"),
-      selected: null,
+      highlights: Array(64).fill(null),
     };
   }
-
+  jumpTo(step) {
+    this.setState({
+      turnNumber: step,
+      wIsNext: step % 2 === 0,
+    });
+  }
+  clearHighlights() {
+    this.setState({
+      highlights: [
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+        "lightsquare",
+        "darksquare",
+      ],
+    });
+  }
   render() {
+    if (!this.state.highlights[0]) {
+      this.clearHighlights();
+    }
     const history = this.state.history;
     const current = history[this.state.turnNumber];
+    const moves = history.map((step, move) => {
+      const i = history[move].movecoord;
+      let piece = history[move].squares[i];
+      console.log(piece);
+      const desc = move
+        ? Math.floor(move / 2 + 0.5) + ". " + piece[1] + i
+        : "Go to game start";
+      return (
+        <li key={move}>
+          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+        </li>
+      );
+    });
+
     return (
       <div className="game">
         <div className="board">
@@ -95,20 +258,9 @@ class Game extends React.Component {
             sqclass={this.state.highlights}
           />
         </div>
-        <button onClick={() => this.toggleTurn()} className="toggleturn">
-          {"Move: "}
-          {history.length}
-          {" - "}
-          {this.state.wIsNext ? "White to move" : "Black to move"}
-        </button>
+        <ol className="movelist">{moves}</ol>
       </div>
     );
-  }
-
-  toggleTurn() {
-    this.setState({
-      wIsNext: !this.state.wIsNext,
-    });
   }
 
   handleClick(i) {
@@ -119,20 +271,81 @@ class Game extends React.Component {
     const t = this.state.wIsNext ? "w" : "b";
     //if active
     if (highlights.includes("active")) {
-      //move piece
-      if (highlights[i] === "legal" || highlights[i] === "capture") {
-        function active(active) {
-          return active === "active";
+      //move piece if clicked square is a legal move
+      if (highlights[i] === "canCastle") {
+        let activesq = highlights.indexOf("active");
+        let m;
+        //wqsc
+        if (i === 58) {
+          squares[56] = [null, null];
+          squares[58] = ["w", "k"];
+          squares[59] = ["w", "r"];
+          squares[60] = [null, null];
+          m = "O-O-O";
         }
-        let activesq = highlights.findIndex(active);
-        console.log("activesq =", activesq);
-        squares[i] = squares[activesq];
-        squares[activesq] = [null, null];
-        highlights.fill("square");
+        //wksc
+        if (i === 62) {
+          squares[60] = [null, null];
+          squares[61] = ["w", "r"];
+          squares[62] = ["w", "k"];
+          squares[63] = [null, null];
+          m = "O-O";
+        }
+        //bqsc
+        if (i === 2) {
+          squares[0] = [null, null];
+          squares[2] = ["b", "k"];
+          squares[3] = ["b", "r"];
+          squares[4] = [null, null];
+          m = "O-O-O";
+        }
+        //bksc
+        if (i === 6) {
+          squares[4] = [null, null];
+          squares[5] = ["b", "r"];
+          squares[6] = ["b", "k"];
+          squares[7] = [null, null];
+          m = "O-O";
+        }
+        //clear highlights
+        this.clearHighlights();
+        //update history array with most recent board state
         this.setState({
           history: history.concat([
             {
               squares: squares,
+              movecoord: m,
+            },
+          ]),
+          turnNumber: history.length,
+          wIsNext: !this.state.wIsNext,
+        });
+        return;
+      }
+      if (highlights[i] === "legal" || highlights[i] === "capture") {
+        //find the active square
+        let activesq = highlights.indexOf("active");
+        //replace clicked square with contents of active square
+        squares[i] = squares[activesq];
+        squares[activesq] = [null, null];
+        //auto queen
+        if (squares[i][1] === "p") {
+          if (t === "w" && i < 8) {
+            squares[i][1] = "q";
+          }
+          if (t === "b" && i > 55) {
+            squares[i][1] = "q";
+          }
+        }
+        //clear highlights
+        this.clearHighlights();
+        //update history array with most recent board state
+        let m = coords[i];
+        this.setState({
+          history: history.concat([
+            {
+              squares: squares,
+              movecoord: m,
             },
           ]),
           turnNumber: history.length,
@@ -141,7 +354,7 @@ class Game extends React.Component {
         return;
       } else {
         //clear highlights
-        highlights.fill("square");
+        this.clearHighlights();
       }
       // if square empty return
       if (!squares[i][0]) {
@@ -164,7 +377,6 @@ class Game extends React.Component {
       this.setState({
         highlights: highlights,
       });
-      return;
     }
   }
 
@@ -195,8 +407,15 @@ class Game extends React.Component {
     highlights[i] = "active";
     if (t === "w") {
       let n = i - 8;
-      for (n; n > i - 17 && squares[n] && !squares[n][0]; n = n - 8) {
-        highlights[n] = "legal";
+      if (i > 47 && i < 56) {
+        for (n; n > i - 17 && squares[n] && !squares[n][0]; n = n - 8) {
+          highlights[n] = "legal";
+        }
+      } else {
+        n = i - 8;
+        if (squares[n] && !squares[n][0]) {
+          highlights[n] = "legal";
+        }
       }
       n = i - 9;
       if (squares[n]) {
@@ -214,8 +433,15 @@ class Game extends React.Component {
 
     if (t === "b") {
       let n = i + 8;
-      for (n; n < i + 17 && squares[n] && !squares[n][0]; n = n + 8) {
-        highlights[n] = "legal";
+      if (i > 7 && i < 16) {
+        for (n; n < i + 17 && squares[n] && !squares[n][0]; n = n + 8) {
+          highlights[n] = "legal";
+        }
+      } else {
+        n = i + 8;
+        if (squares[n] && !squares[n][0]) {
+          highlights[n] = "legal";
+        }
       }
       n = i + 7;
       if (squares[n]) {
@@ -377,6 +603,7 @@ class Game extends React.Component {
 
   kingHL(t, i, squares, highlights) {
     highlights[i] = "active";
+    const history = this.state.history;
     let nmoves;
     if (i % 8 === 0) {
       nmoves = [-8, -7, 1, 8, 9];
@@ -395,6 +622,52 @@ class Game extends React.Component {
           highlights[e] = "capture";
           console.log(e);
         }
+      }
+    }
+    if (t === "w" && i === 60) {
+      //white queenside castle
+      if (
+        !history.wkmoved &&
+        !squares[57][0] &&
+        !squares[58][0] &&
+        !squares[59][0] &&
+        squares[56][0] === "w" &&
+        squares[56][1] === "r"
+      ) {
+        highlights[58] = "canCastle";
+      }
+      //white kingside castle
+      if (
+        !history.wkmoved &&
+        !squares[61][0] &&
+        !squares[62][0] &&
+        squares[63][0] === "w" &&
+        squares[63][1] === "r"
+      ) {
+        highlights[62] = "canCastle";
+      }
+    }
+    if (t === "b" && i === 4) {
+      //black queenside castle
+      if (
+        !history.bkmoved &&
+        !squares[3][0] &&
+        !squares[2][0] &&
+        !squares[1][0] &&
+        squares[0][0] === "b" &&
+        squares[0][1] === "r"
+      ) {
+        highlights[2] = "canCastle";
+      }
+      //black kingside castle
+      if (
+        !history.bkmoved &&
+        !squares[5][0] &&
+        !squares[6][0] &&
+        squares[7][0] === "b" &&
+        squares[7][1] === "r"
+      ) {
+        highlights[6] = "canCastle";
       }
     }
   }
@@ -426,7 +699,7 @@ function Square(props) {
   if (props.class2) {
     return (
       <button className={props.class1}>
-        <div className={props.class2}  onClick={() => props.onClick()} />
+        <div className={props.class2} onClick={() => props.onClick()} />
       </button>
     );
   } else {

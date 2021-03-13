@@ -30,17 +30,17 @@ class Game extends React.Component {
             [null, null],
             [null, null],
             [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
-            [null, null],
             ["W", "R"],
+            [null, null],
+            [null, null],
+            [null, null],
+            [null, null],
+            [null, null],
+            [null, null],
+            [null, null],
+            [null, null],
+            [null, null],
+            [null, null],
             [null, null],
             [null, null],
             [null, null],
@@ -121,6 +121,8 @@ class Game extends React.Component {
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     const highlights = this.state.highlights;
+    const wIsNext = this.state.wIsNext;
+    const t = this.state.wIsNext ? "W" : "B";
     //if active, clear highlights
     if (highlights.includes("active")) {
       highlights.fill("square");
@@ -133,19 +135,13 @@ class Game extends React.Component {
       });
       return;
     }
-    const t = this.state.wIsNext ? "W" : "B";
-    //check if white's turn
-
-    if (this.state.wIsNext) {
-      if (squares[i][0] === "W") {
-        this.pieceHL(t, i, squares, highlights);
-      }
+    //if white clicks on white piece, highlight legal moves
+    if (wIsNext && squares[i][0] === t) {
+      this.pieceHL(t, i, squares, highlights);
     }
-
-    if (!this.state.wIsNext) {
-      if (squares[i][0] === "B") {
-        this.pieceHL(t, i, squares, highlights);
-      }
+    //if black clicks on black piece, highlight legal moves
+    if (!wIsNext && squares[i][0] === t) {
+      this.pieceHL(t, i, squares, highlights);
     }
     this.setState({
       highlights: highlights,
@@ -176,6 +172,7 @@ class Game extends React.Component {
   }
 
   pawnHL(t, i, squares, highlights) {
+    //moves only, no captures yet
     highlights[i] = "active";
     if (t === "W") {
       for (
@@ -199,187 +196,76 @@ class Game extends React.Component {
 
   rookHL(t, i, squares, highlights) {
     highlights[i] = "active";
-    //up
-    for (let n = i - 8; n > 0 && squares[n]; n = n - 8) {
-      if (!squares[n][0]) {
-        highlights[n] = "legal";
-      }
-      if (t === "W" && squares[n][0] === "B" && highlights[n + 8] === "legal") {
-        highlights[n] = "capture";
-      }
-      if (t === "B" && squares[n][0] === "W" && highlights[n + 8] === "legal") {
-        highlights[n] = "capture";
-      }
+    let n = i - 8; //up
+    for (n; squares[n] && !squares[n][0]; n = n - 8) {
+      highlights[n] = "legal";
     }
-    //down
-    for (let n = i + 8; n < 64 && !squares[n][0]; n = n + 8) {
-      if (squares[n]) {
-        if (!squares[n][0]) {
-          highlights[n] = "legal";
-        }
-        if (
-          t === "W" &&
-          squares[n][0] === "B" &&
-          highlights[n - 8] === "legal"
-        ) {
-          highlights[n] = "capture";
-        }
-        if (t === "B" && squares[n][0] === "W") {
-          highlights[n] = "capture";
-        }
-      }
+    for (
+      n;
+      squares[n] && squares[n][0] !== t && highlights[n + 8] !== "capture";
+      n = n - 8
+    ) {
+      highlights[n] = "capture";
     }
-    //left
-    for (let n = i - 1; n % 8 !== 7 && !squares[n][0]; --n) {
-      if (squares[n]) {
-        if (!squares[n][0]) {
-          console.log(squares[n]);
-          highlights[n] = "legal";
-        }
-        if (
-          t === "W" &&
-          squares[n][0] === "B" &&
-          !highlights.includes("capture")
-        ) {
-          highlights[n] = "capture";
-        }
-        if (t === "B" && squares[n][0] === "W") {
-          highlights[n] = "capture";
-        }
-      }
+    n = i + 8; //down
+    for (n; squares[n] && !squares[n][0]; n = n + 8) {
+      highlights[n] = "legal";
     }
-    //right
-    for (let n = i + 1; n % 8 !== 0 && !squares[n][0]; ++n) {
-      if (squares[n]) {
-        if (!squares[n][0]) {
-          console.log(squares[n]);
-          highlights[n] = "legal";
-        }
-        if (
-          t === "W" &&
-          squares[n][0] === "B" &&
-          !highlights.includes("capture")
-        ) {
-          highlights[n] = "capture";
-        }
-        if (t === "B" && squares[n][0] === "W") {
-          highlights[n] = "capture";
-        }
-      }
+    for (
+      n;
+      squares[n] && squares[n][0] !== t && highlights[n - 8] !== "capture";
+      n = n + 8
+    ) {
+      highlights[n] = "capture";
+    }
+    n = i - 1; //left
+    for (n; squares[n] && !squares[n][0] && n % 8 !== 7; n = n - 1) {
+      highlights[n] = "legal";
+    }
+    for (
+      n;
+      squares[n] &&
+      squares[n][0] !== t &&
+      n % 8 !== 7 &&
+      highlights[n + 1] !== "capture";
+      n = n - 1
+    ) {
+      highlights[n] = "capture";
+    }
+    n = i + 1; //right
+    for (n; squares[n] && !squares[n][0] && n % 8 !== 0; n = n + 1) {
+      highlights[n] = "legal";
+    }
+    for (
+      n;
+      squares[n] &&
+      squares[n][0] !== t &&
+      n % 8 !== 0 &&
+      highlights[n - 1] !== "capture";
+      n = n + 1
+    ) {
+      highlights[n] = "capture";
     }
   }
 
   knightHL(t, i, squares, highlights) {
     highlights[i] = "active";
+    console.log(i);
     const nmoves = [-17, -15, -10, -6, 6, 10, 15, 17];
-    let n = 0;
-    let e = i + nmoves[n];
-    //a file
-    if (i % 8 === 0) {
-      for (n = 1; n < 8; n = n + 2) {
-        if (squares[e]) {
-          if (!squares[e][0]) {
-            console.log(squares[e]);
-            highlights[e] = "legal";
-          }
-          if (
-            t === "W" &&
-            squares[e][0] === "B" &&
-            !highlights.includes("capture")
-          ) {
-            highlights[e] = "capture";
-          }
-          if (t === "B" && squares[e][0] === "W") {
-            highlights[e] = "capture";
-          }
+    const imod = i % 8;
+    for (let n = 0; n < 8; n++) {
+      let e = i + nmoves[n];
+      if (squares[e]) {
+        if (!squares[e][0]) {
+          highlights[e] = "legal";
+          console.log(e);
         }
-      }
-      //b file
-    } else if (i % 8 === 1) {
-      for (n = 0; n < 8; n++) {
-        if (n !== 2 && n !== 4) {
-          if (squares[e]) {
-            if (!squares[e][0]) {
-              console.log(squares[e]);
-              highlights[e] = "legal";
-            }
-            if (
-              t === "W" &&
-              squares[e][0] === "B" &&
-              !highlights.includes("capture")
-            ) {
-              highlights[e] = "capture";
-            }
-            if (t === "B" && squares[e][0] === "W") {
-              highlights[e] = "capture";
-            }
-          }
-        }
-      }
-      //g file
-    } else if (i % 8 === 6) {
-      for (n = 0; n < 8; n++) {
-        if (n !== 3 && n !== 5) {
-          if (squares[e]) {
-            if (!squares[e][0]) {
-              console.log(squares[e]);
-              highlights[e] = "legal";
-            }
-            if (
-              t === "W" &&
-              squares[e][0] === "B" &&
-              !highlights.includes("capture")
-            ) {
-              highlights[e] = "capture";
-            }
-            if (t === "B" && squares[e][0] === "W") {
-              highlights[e] = "capture";
-            }
-          }
-        }
-      }
-      //h file
-    } else if (i % 8 === 7) {
-      for (n = 0; n < 8; n = n + 2) {
-        if (squares[e]) {
-          if (!squares[e][0]) {
-            console.log(squares[e]);
-            highlights[e] = "legal";
-          }
-          if (
-            t === "W" &&
-            squares[e][0] === "B" &&
-            !highlights.includes("capture")
-          ) {
-            highlights[e] = "capture";
-          }
-          if (t === "B" && squares[e][0] === "W") {
-            highlights[e] = "capture";
-          }
-        }
-      }
-      //other files
-    } else {
-      for (n = 0; n < 8; n++) {
-        if (squares[e]) {
-          if (!squares[e][0]) {
-            console.log(squares[e]);
-            highlights[e] = "legal";
-          }
-          if (
-            t === "W" &&
-            squares[e][0] === "B" &&
-            !highlights.includes("capture")
-          ) {
-            highlights[e] = "capture";
-          }
-          if (t === "B" && squares[e][0] === "W") {
-            highlights[e] = "capture";
-          }
+        else if (squares[e][0] !== t) {
+          highlights[e] = "capture";
+          console.log(e);
         }
       }
     }
-    console.log("i % 8 =", i % 8);
   }
 
   bishopHL(t, i, squares, highlights) {

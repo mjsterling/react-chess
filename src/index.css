@@ -1,32 +1,111 @@
-.board {
-  height: 64vh;
-  width: 64vh;
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}
+
+body {
   margin: 0;
+  padding: 0;
+  background: darkslategray;
+  color: white;
+  font-family: sans-serif;
+  width: 100%;
+  height: 100%;
+
+}
+
+ol {
+  display: flex;
+  flex-flow: column wrap;
+  height: 20vh;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
+li {
+    list-style-type: none;
+    padding: 0;
+}
+
+.whoseturn {
+  margin-bottom: 1vh;
+  font-size: 2vh;
+  font-weight: bold;
+}
+li button {
+  background: darkgray;
+  font-size: 1.7vh;
+  height: 3vh;
+  width: 13vh;
+  text-align: center;
+  font-weight: bold;
+}
+.game {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+.header {
+  font-size: 4vh;
+  font-family: sans-serif;
+  margin: 1vh auto;
+  font-weight: bold;
+  text-align: center;
+}
+.subheader {
+  font-size: 2vh;
+  margin: 1vh auto;
+  text-align: center;
+}
+.footer {
+  font-size: 1.5vh;
+  text-align: center;
+}
+.board {
+  height: 56vh;
+  width: 56vh;
+  margin: 0 auto;
   padding: 0;
   display: flex;
   flex-flow: row wrap;
-  box-sizing: border-box;
 }
 
-.square {
-  width: 8vh;
-  height: 8vh;
+.darksquare {
+  width: 7vh;
+  height: 7vh;
   margin: 0;
-  padding: 1vh;
-  background-color: rgb(192, 237, 255);
+  padding: 0.5vh;
+  background-color: rgb(116, 215, 255);
   border: 1px solid black;
-  box-sizing: border-box;
-  font-family: sans-serif;
   font-size: 2vh;
 }
 
+.lightsquare {
+    width: 7vh;
+    height: 7vh;
+    margin: 0;
+    padding: 0.5vh;
+    background-color: rgb(179, 234, 255);
+    border: 1px solid black;
+    font-family: sans-serif;
+    font-size: 2vh;
+}
+
 .active {
-  width: 8vh;
-  height: 8vh;
+  width: 7vh;
+  height: 7vh;
   margin: 0;
-  padding: 1vh;
+  padding: 0.5vh;
   border: 1px solid black;
-  box-sizing: border-box;
   background-color: white;
   font-family: sans-serif;
   font-size: 2vh;
@@ -34,106 +113,96 @@
 }
 
 .legal {
-  width: 8vh;
-  height: 8vh;
+  width: 7vh;
+  height: 7vh;
   margin: 0;
-  padding: 1vh;
+  padding: 0.5vh;
   border: 1px solid black;
-  box-sizing: border-box;
   background-color: yellow;
 }
 
+.canCastle {
+        width: 7vh;
+        height: 7vh;
+        margin: 0;
+        padding: 0.5vh;
+        border: 1px solid black;
+        background-color: yellow;
+}
+
 .capture {
-  width: 8vh;
-  height: 8vh;
+  width: 7vh;
+  height: 7vh;
   margin: 0;
-  padding: 1vh;
+  padding: 0.5vh;
   border: 1px solid black;
-  box-sizing: border-box;
   background-color: red;
   font-weight: bold;
   color: white;
   font-size: 2vh;
 }
 
-.toggleturn {
-  height: 5vh;
-  width: 20vw;
-}
-
-
 .wp {
-    content: url(assets/wp.svg);
-height: 6vh;
-width: 6vh;
+  content: url(assets/wp.svg);
+  height: 6vh;
+  width: 6vh;
 }
 .wr {
-    content: url(assets/wr.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/wr.svg);
+  height: 6vh;
+  width: 6vh;
 }
 .wn {
-    content: url(assets/wn.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/wn.svg);
+  height: 6vh;
+  width: 6vh;
 }
 
 .wb {
-    content: url(assets/wb.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/wb.svg);
+  height: 6vh;
+  width: 6vh;
 }
 
 .wq {
-    content: url(assets/wq.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/wq.svg);
+  height: 6vh;
+  width: 6vh;
 }
 .wk {
-    content: url(assets/wk.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/wk.svg);
+  height: 6vh;
+  width: 6vh;
 }
 .bp {
-    content: url(assets/bp.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/bp.svg);
+  height: 6vh;
+  width: 6vh;
 }
 .br {
-    content: url(assets/br.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/br.svg);
+  height: 6vh;
+  width: 6vh;
 }
 .bn {
-    content: url(assets/bn.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/bn.svg);
+  height: 6vh;
+  width: 6vh;
 }
 
 .bb {
-    content: url(assets/bb.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/bb.svg);
+  height: 6vh;
+  width: 6vh;
 }
 
 .bq {
-    content: url(assets/bq.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/bq.svg);
+  height: 6vh;
+  width: 6vh;
 }
 .bk {
-    content: url(assets/bk.svg);
-height: 6vh;
-width: 6vh;
-
+  content: url(assets/bk.svg);
+  height: 6vh;
+  width: 6vh;
 }

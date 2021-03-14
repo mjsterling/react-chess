@@ -141,10 +141,8 @@ class Game extends React.Component {
             ["w", "n"],
             ["w", "r"],
           ],
-          movecoord: "",
-          wkcheck: false,
+          notation: "",
           wkmoved: false,
-          bkcheck: false,
           wkmoved: false,
         },
       ],
@@ -236,21 +234,26 @@ class Game extends React.Component {
     const history = this.state.history;
     const current = history[this.state.turnNumber];
     const moves = history.map((step, move) => {
-      const i = history[move].movecoord;
-      let piece = history[move].squares[i];
-      console.log(piece);
+      const notation = history[move].notation;
       const desc = move
-        ? Math.floor(move / 2 + 0.5) + ". " + piece[1] + i
-        : "Go to game start";
+        ? Math.floor(move / 2 + 0.5) + ". " + notation
+        : "Start";
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
       );
     });
-
+    let turn;
+    if (this.state.wIsNext) {
+      turn = "White to move";
+    } else {
+      turn = "Black to move";
+    }
     return (
       <div className="game">
+        <div className="header">React Chess</div>
+        <div className="whoseturn">{turn}</div>
         <div className="board">
           <Board
             squares={current.squares}
@@ -259,6 +262,11 @@ class Game extends React.Component {
           />
         </div>
         <ol className="movelist">{moves}</ol>
+        <div className="footer">
+          &copy; <a href="https://matthew-sterling.netlify.app">Matthew Sterling</a> 2021. Built entirely in React as a learning exercise. Partially inspired by the <a href="https://reactjs.org/">reactjs.org</a> Tic Tac Toe tutorial. <a href="https://commons.wikimedia.org/w/index.php?curid=1499803">Chess pieces licensed under CC3.0</a><br />
+          Disclaimer: I know this isn't how chess works, but I didn't want to
+          spend a week trying to program check mechanics.
+        </div>
       </div>
     );
   }
@@ -272,6 +280,10 @@ class Game extends React.Component {
     //if active
     if (highlights.includes("active")) {
       //move piece if clicked square is a legal move
+      let x = "";
+      if (highlights[i] === "capture") {
+        x = "x";
+      }
       if (highlights[i] === "canCastle") {
         let activesq = highlights.indexOf("active");
         let m;
@@ -314,7 +326,7 @@ class Game extends React.Component {
           history: history.concat([
             {
               squares: squares,
-              movecoord: m,
+              notation: m,
             },
           ]),
           turnNumber: history.length,
@@ -337,15 +349,23 @@ class Game extends React.Component {
             squares[i][1] = "q";
           }
         }
+
+        //calculate chess notation and concenate strings to var
+        let piece = squares[i][1];
+        if (piece === "p") {
+          piece = "";
+        }
+        let notation = piece + x + coords[i];
+        console.log(notation);
         //clear highlights
         this.clearHighlights();
+
         //update history array with most recent board state
-        let m = coords[i];
         this.setState({
           history: history.concat([
             {
               squares: squares,
-              movecoord: m,
+              notation: notation,
             },
           ]),
           turnNumber: history.length,

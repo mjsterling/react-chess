@@ -265,7 +265,7 @@ class Game extends React.Component {
         <div className="footer">
           &copy; <a href="https://matthew-sterling.netlify.app">Matthew Sterling</a> 2021. Built entirely in React as a learning exercise. Partially inspired by the <a href="https://reactjs.org/">reactjs.org</a> Tic Tac Toe tutorial. <a href="https://commons.wikimedia.org/w/index.php?curid=1499803">Chess pieces licensed under CC3.0</a><br />
           Disclaimer: I know this isn't how chess works, but I didn't want to
-          spend a week trying to program check mechanics.
+          spend a week trying to program check mechanics. Source code <a href="https://github.com/mjsterling/react-chess/blob/main/src/index.js">here</a>
         </div>
       </div>
     );
